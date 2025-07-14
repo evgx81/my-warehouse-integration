@@ -2,13 +2,20 @@
 import requests
 import base64
 import json
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+# Данные для доступа к API сервиса "МойСклад"
+LOGIN = os.getenv("LOGIN")
+PASSWORD = os.getenv("PASSWORD")
 
 def get_auntefication_token() -> str:
     url = "https://api.moysklad.ru/api/remap/1.2/security/token"
 
     with requests.Session() as session:
-        session.auth = ("admin@enjoyer", "Admin_12343412")
+        session.auth = (LOGIN, PASSWORD)
         response = session.post(url,)
         return response.json()["access_token"]
 
@@ -59,3 +66,4 @@ if __name__ == "__main__":
     for product_id in products_ids:
         product_images = get_products_images(token, product_id)
         print(update_products_images(token, product_id, product_images))
+        break
